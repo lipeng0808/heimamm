@@ -8,6 +8,11 @@
         <span class="sub-title">用户登录</span>
       </div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+        <!-- 
+          model: 表单数据对象   object
+          rules: 表单验证规则   object
+          validate: 被校验的表单项 prop 值，校验是否通过，错误消息（如果存在）
+         -->
         <el-form-item prop="phone">
           <el-input
             v-model="ruleForm.phone"
@@ -52,21 +57,28 @@
           <el-button type="primary" @click="login">登 录</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">注 册</el-button>
+          <el-button type="primary" @click="register">注 册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="right">
       <img src="@/assets/img/login_bg.png" alt="" />
     </div>
+    <register ref="register" />
   </div>
 </template>
 
 <script>
+// 导入注册组件
+import Register from './Register'
 export default {
+  name: 'Login',
+  components: {
+    Register
+  },
   data () {
     return {
-      codeUrl: 'http://127.0.0.1/heimamm/public/captcha?type=login',
+      codeUrl: `${process.env.VUE_APP_BASEURL}/captcha?type=login`,
       ruleForm: {
         phone: '',
         password: '',
@@ -110,11 +122,13 @@ export default {
     }
   },
   methods: {
+    // 验证码
     doClick () {
       // 网络请求的缓存: GET +  地址不变
       // new Date() - 0: 将当前时间转换为时间戳
-      this.codeUrl = `http://127.0.0.1/heimamm/public/captcha?type=login&t=${new Date() -
-        0}`
+      this.codeUrl = `${
+        process.env.VUE_APP_BASEURL
+      }/captcha?type=login&t=${new Date() - 0}`
     },
     // 登录按钮
     login () {
@@ -127,16 +141,28 @@ export default {
         //   console.log(res)
         // })
         const res = await this.$axios.post('/login', this.ruleForm)
-        if (res.data.code === 200) {
-          this.$message({ message: '登录成功!', type: 'success' })
+        if (res.code === 200) {
+          this.$message({
+            message: '登录成功!',
+            type: 'success'
+          })
+          // 保存token
+          localStorage.setItem('token', res.data.token)
           // 跳转路由
           this.$router.push('/layout')
         } else {
-          this.$message.error({ message: res.data.message })
+          this.$message.error({
+            message: res.message
+          })
           // 调用函数,刷新验证码
           this.doClick()
+          this.ruleForm.code = ''
         }
       })
+    },
+    // 注册按钮
+    register () {
+      this.$refs.register.dialogVisible = true
     }
   }
 }

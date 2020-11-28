@@ -71,6 +71,8 @@
 <script>
 // 导入注册组件
 import Register from './Register'
+// 按需导入token文件
+import { setToken } from '@/utils/token.js'
 export default {
   name: 'Login',
   components: {
@@ -147,7 +149,7 @@ export default {
             type: 'success'
           })
           // 保存token
-          localStorage.setItem('token', res.data.token)
+          localStorage.setItem('myToken', res.data.token)
           // 跳转路由
           this.$router.push('/layout')
         } else {

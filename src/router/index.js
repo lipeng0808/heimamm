@@ -26,15 +26,8 @@ const routes = [{
   {
     path: '/layout',
     component: Layout,
+    redirect: '/layout/chart',
     children: [{
-        path: 'welcome',
-        component: Welcome
-      },
-      {
-        path: '',
-        component: Welcome
-      },
-      {
         path: 'chart',
         component: Chart
       },

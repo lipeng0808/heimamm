@@ -1,10 +1,9 @@
 <template>
-  <div class="chart">chart</div>
+  <div class="chart">数据预览</div>
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
-<style>
-</style>
+<style></style>

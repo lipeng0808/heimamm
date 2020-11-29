@@ -1,10 +1,9 @@
 <template>
-  <div class="enterprice">enterprice</div>
+  <div class="enterprice">企业列表</div>
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
-<style>
-</style>
+<style></style>

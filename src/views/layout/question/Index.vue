@@ -1,10 +1,9 @@
 <template>
-  <div>question</div>
+  <div>题库列表</div>
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
-<style>
-</style>
+<style></style>

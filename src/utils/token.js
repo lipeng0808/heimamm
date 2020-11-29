@@ -21,5 +21,7 @@ const removeToken = () => {
 
 //设置按需导出: 需要什么,就导出什么
 export {
-    setToken
+    setToken,
+    getToken,
+    removeToken
 }

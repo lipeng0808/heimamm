@@ -72,7 +72,7 @@
 // 导入注册组件
 import Register from './Register'
 // 按需导入token文件
-import { setToken } from '@/utils/token.js'
+import { setToken } from '@/utils/token'
 export default {
   name: 'Login',
   components: {
@@ -149,7 +149,8 @@ export default {
             type: 'success'
           })
           // 保存token
-          localStorage.setItem('myToken', res.data.token)
+          // localStorage.setItem('myToken', res.data.token)
+          setToken(res.data.token)
           // 跳转路由
           this.$router.push('/layout')
         } else {

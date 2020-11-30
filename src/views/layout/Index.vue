@@ -8,8 +8,8 @@
           <span class="title">黑马面面</span>
         </div>
         <div class="right">
-          <img :src="userInfo.avatar" alt="" />
-          <span class="name">{{ userInfo.username }} 欢迎您</span>
+          <img :src="userImg" alt="" />
+          <span class="name">{{ username }} 欢迎您</span>
           <button
             type="button"
             class="el-button el-button--primary"
@@ -66,22 +66,21 @@ export default {
   name: 'layout',
   data () {
     return {
-      userInfo: {} //用户信息
+      username: '', //用户昵称
+      userImg: '' //用户头像
     }
   },
   methods: {
     handleOpen () {},
     handleClose () {},
     // 退出按钮
-    layout () {
-      const token = removeToken()
-    }
+    layout () {}
   },
   mounted () {
     // 发送axios请求
     this.$axios.get('/info').then(res => {
-      this.userInfo = res.data
-      this.userInfo.avatar = `${process.env.VUE_APP_BASEURL}/${res.data.avatar}`
+      this.username = res.data.username
+      this.userImg = process.env.VUE_APP_BASEURL + '/' + res.data.avatar
     })
   }
 }

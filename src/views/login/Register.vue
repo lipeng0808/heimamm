@@ -217,10 +217,11 @@ export default {
   },
   // 设置侦听器,关闭表单后,重置表单
   watch: {
-    dialogVisible: function (newValue, oldValue) {
+    dialogVisible: function (newValue) {
       if (!newValue) {
         // 重置校验并清空表单
         this.$refs.ruleForm.resetFields()
+        this.imageUrl = ''
       }
     }
   }

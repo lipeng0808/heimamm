@@ -67,26 +67,21 @@ const router = new VueRouter({
 })
 
 // 权限控制,判断是否为登录状态
-/**
- * @description:beforeEach()方法
- * @param {to,from,next} 
- *  to: 去到哪个页面路由
- *  from: 从哪个路由页面过来
- *  next: 是否通过
- */
+
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
+    // 登录页面直接放行
     next()
   } else {
     const token = getToken()
     if (token) {
+      // 登录了
       next()
     } else {
-      router.path('/login')
+      // 没有登录，跳转到登录页面
+      next('/login')
     }
   }
 })
-
-
 
 export default router

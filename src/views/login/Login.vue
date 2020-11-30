@@ -149,7 +149,6 @@ export default {
             type: 'success'
           })
           // 保存token
-          // localStorage.setItem('myToken', res.data.token)
           setToken(res.data.token)
           // 跳转路由
           this.$router.push('/layout')

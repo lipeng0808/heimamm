@@ -3,7 +3,10 @@
     <el-container class="index-container">
       <el-header>
         <div class="left">
-          <i class="el-icon-s-fold setheight"></i>
+          <i
+            class="el-icon-s-fold setheight"
+            @click="isCollapse = !isCollapse"
+          ></i>
           <img class="marginlr" src="@/assets/img/layout_icon.png" alt="" />
           <span class="title">黑马面面</span>
         </div>
@@ -13,7 +16,7 @@
           <button
             type="button"
             class="el-button el-button--primary"
-            @click="layout"
+            @click="logout"
           >
             <span>退出</span>
           </button>
@@ -27,8 +30,7 @@
           <el-menu
             default-active="2"
             class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
+            :collapse="isCollapse"
             router
           >
             <el-menu-item index="/layout/chart">
@@ -62,19 +64,38 @@
 </template>
 
 <script>
+// 导入token模块
+import { removeToken } from '@/utils/token'
 export default {
   name: 'layout',
   data () {
     return {
+      isCollapse: false,
       username: '', //用户昵称
       userImg: '' //用户头像
     }
   },
   methods: {
-    handleOpen () {},
-    handleClose () {},
     // 退出按钮
-    layout () {}
+    logout () {
+      this.$confirm('确实要退出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // 退出时删除token,跳转到登录页面
+          const res = await this.$axios.get('/logout')
+          if (res.code === 200) {
+            removeToken()
+            this.$router.push('/login')
+            this.$message.success('退出成功')
+          } else {
+            this.$message.error(res.message)
+          }
+        })
+        .catch(() => {})
+    }
   },
   mounted () {
     // 发送axios请求

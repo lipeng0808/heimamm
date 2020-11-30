@@ -5,8 +5,7 @@ const KEY = 'myToken'
 
 // 保存token
 const setToken = token => {
-    console.log(token);
-    localStorage.getItem(KEY, token)
+    localStorage.setItem(KEY, token)
 }
 
 // 获取token

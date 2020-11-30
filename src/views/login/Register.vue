@@ -207,10 +207,10 @@ export default {
         const res = await this.$axios.post('/register', this.ruleForm)
         // 判断是否请求成功
         if (res.code === 200) {
-          this.$message.success(res.message)
+          this.$message.success('注册成功')
           this.dialogVisible = false
         } else {
-          this.$message.error(res.message)
+          this.$message.error('注册失败')
         }
       })
     }
@@ -222,6 +222,7 @@ export default {
         // 重置校验并清空表单
         this.$refs.ruleForm.resetFields()
         this.imageUrl = ''
+        this.codeClick()
       }
     }
   }

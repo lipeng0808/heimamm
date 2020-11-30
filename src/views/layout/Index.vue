@@ -28,7 +28,7 @@
          -->
         <el-aside width="auto">
           <el-menu
-            default-active="2"
+            :default-active="defaultActive"
             class="el-menu-vertical-demo"
             :collapse="isCollapse"
             router
@@ -70,6 +70,7 @@ export default {
   name: 'layout',
   data () {
     return {
+      defaultActive: '/layout/user',
       isCollapse: false,
       username: '', //用户昵称
       userImg: '' //用户头像
@@ -98,11 +99,20 @@ export default {
     }
   },
   mounted () {
-    // 发送axios请求
+    // 发送axios请求,获取用户信息
     this.$axios.get('/info').then(res => {
       this.username = res.data.username
       this.userImg = process.env.VUE_APP_BASEURL + '/' + res.data.avatar
     })
+    // 获取当前路径url
+    this.defaultActive = this.$route.path
+  },
+  // 侦听器
+  watch: {
+    '$route.path': function (newVal) {
+      // console.log(newVal, oldVal)
+      this.defaultActive = newVal
+    }
   }
 }
 </script>
@@ -179,8 +189,6 @@ export default {
   .el-main {
     background-color: #e9eef3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
   }
 }
 </style>

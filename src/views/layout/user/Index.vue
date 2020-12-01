@@ -9,7 +9,7 @@
           <el-input v-model="form.email"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="role_id">
-          <el-select v-model="form.role_id" placeholder="请选择" clearable>
+          <el-select v-model="form.role_id" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -28,30 +28,34 @@
     </el-card>
     <el-card class="two">
       <!-- 数据列表 -->
-      <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="序号"> </el-table-column>
+      <el-table :data="list" stripe style="width: 100%">
+        <el-table-column prop="id" label="序号" type="index"> </el-table-column>
         <el-table-column prop="username" label="用户名"> </el-table-column>
         <el-table-column prop="phone" label="电话"> </el-table-column>
         <el-table-column prop="email" label="邮箱"> </el-table-column>
         <el-table-column prop="role" label="角色"> </el-table-column>
         <el-table-column prop="remark" label="备注"> </el-table-column>
-        <el-table-column prop="status" label="状态">{{
-          status
-        }}</el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column label="状态">
+          <!-- slot插槽 -->
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
+            <span v-if="scope.row.status === 0" style="color:red;">禁用</span>
+            <span v-if="scope.row.status === 1" style="color:#6ac144;"
+              >启用</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="300">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.row.id)">
               编辑
             </el-button>
             <el-button
               size="mini"
-              type="success"
-              @click="handleStart(scope.$index, scope.row)"
-              >启用</el-button
+              :type="scope.row.status === 0 ? 'success' : 'info'"
+              @click="handleStart(scope.row.id)"
+              >{{ scope.row.status === 0 ? '启用' : '禁用' }}</el-button
             >
-            <el-button
-              size="mini"
-              @click="handleDelete(scope.$index, scope.row)"
+            <el-button size="mini" @click="handleDelete(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -97,9 +101,7 @@ export default {
       page: 0, //当前页
       limit: 5, //每页显示的数量
       total: 0, //总数
-      tableData: [], //列表数组
-      status: '', //启用或禁用
-      isClearable: false
+      list: [] //列表数组
     }
   },
   methods: {
@@ -110,49 +112,65 @@ export default {
       })
       if (res.code === 200) {
         // 渲染列表数据
-        this.tableData = res.data.items
-        // 启用或禁用
-        res.data.items.forEach(ele => {
-          ele.status === 0 ? (this.status = '禁用') : (this.status = '启用')
-        })
+        this.list = res.data.items
         // 列表总数
         this.total = res.data.pagination.total
       }
     },
     // 搜索
     search () {
+      this.page = 1
       this.getListData()
     },
     // 清空
     delClick () {
-      this.form.username = ''
-      this.form.email = ''
-      this.form.role_id = ''
+      // 清空输入框内容
+      this.$refs.form.resetFields()
+      // 调用方法,刷新列表
+      this.search()
     },
     // 新增
     add () {
       console.log(333)
     },
     // 编辑
-    handleEdit (index, row) {
-      console.log(index, row)
+    handleEdit (id) {
+      console.log(id)
     },
     // 启用
-    handleStart (index, row) {
-      console.log(index, row)
+    async handleStart (id) {
+      const res = await this.$axios.post('/user/status', { id: id })
+      if (res.code === 200) {
+        this.$message.success({ message: '修改成功!' })
+        this.getListData()
+      }
     },
     // 删除
-    handleDelete (index, row) {
-      console.log(index, row)
+    handleDelete (id) {
+      this.$confirm('是否确定删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          const res = await this.$axios.post('/user/remove', { id: id })
+          if (res.code === 200) {
+            this.$message.success({ message: '删除成功!' })
+            this.getListData()
+          }
+        })
+        .catch(() => {})
     },
 
     // limit: 设置分页栏的每页显示数量
     handleSizeChange (val) {
+      this.page = 1
       this.limit = val
       this.getListData()
     },
     // page: 设置显示第几页
     handleCurrentChange (val) {
+      this.page = 1
       this.page = val
       this.getListData()
     }

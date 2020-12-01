@@ -109,9 +109,9 @@ export default {
   },
   // 侦听器
   watch: {
-    '$route.path': function (newVal) {
+    $router (newVal) {
       // console.log(newVal, oldVal)
-      this.defaultActive = newVal
+      this.defaultActive = newVal.path
     }
   }
 }

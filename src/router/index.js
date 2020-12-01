@@ -29,7 +29,7 @@ const routes = [{
   {
     path: '/layout',
     component: Layout,
-    redirect: '/layout/chart',
+    redirect: '/layout/user',
     children: [{
         path: 'chart',
         component: Chart

@@ -1,10 +1,10 @@
 // 导入axios
 import Vue from 'vue'
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 import {
     getToken,
-    // removeToken
+    removeToken
 } from './token'
 
 
@@ -29,7 +29,11 @@ axios.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
-
+    // token过期时
+    if (response.data.code === 206) {
+        removeToken()
+        router.push(`/login?t=${new Date()-0}`)
+    }
     // 对响应数据做点什么   
     return response.data;
 

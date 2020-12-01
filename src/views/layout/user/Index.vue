@@ -46,7 +46,7 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row.id)">
+            <el-button size="mini" @click="edit(scope.row)">
               编辑
             </el-button>
             <el-button
@@ -79,12 +79,18 @@
         </el-pagination>
       </div>
     </el-card>
+    <update ref="update" />
   </div>
 </template>
 
 <script>
+// 导入子组件
+import Update from './Add-or-update'
 export default {
   name: 'User',
+  components: {
+    Update
+  },
   data () {
     return {
       form: {
@@ -131,11 +137,14 @@ export default {
     },
     // 新增
     add () {
-      console.log(333)
+      this.$refs.update.mode = 'add'
+      this.$refs.update.dialogVisible = true
     },
     // 编辑
-    handleEdit (id) {
-      console.log(id)
+    edit (row) {
+      this.$refs.update.form = JSON.parse(JSON.stringify(row))
+      this.$refs.update.mode = 'edit'
+      this.$refs.update.dialogVisible = true
     },
     // 启用
     async handleStart (id) {

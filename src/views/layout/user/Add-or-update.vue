@@ -1,10 +1,172 @@
 <template>
-  <div>update</div>
+  <el-dialog :visible.sync="dialogVisible" width="600px" @close="close" center>
+    <span slot="title" class="header">
+      {{ mode == 'add' ? '新增用户' : '编辑用户' }}
+    </span>
+    <!-- form表单 -->
+    <el-form
+      :model="form"
+      ref="form"
+      :rules="rules"
+      label-width="80px"
+      :inline="false"
+      size="normal"
+    >
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="form.username"></el-input>
+      </el-form-item>
+
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="form.email"></el-input>
+      </el-form-item>
+
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="form.phone"></el-input>
+      </el-form-item>
+
+      <el-form-item label="角色" prop="role_id">
+        <el-select v-model="form.role_id" placeholder="请选择">
+          <el-option
+            v-for="item in optionsOne"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="form.status" placeholder="请选择状态">
+          <el-option
+            v-for="item in optionsTwo"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="用户备注" prop="remark">
+        <el-input v-model="form.remark"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <span slot="footer">
+      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="submit">确定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
-export default {};
-</script>
+export default {
+  data () {
+    return {
+      dialogVisible: false,
+      mode: '', // add:新增 edit:编辑
+      form: {
+        username: '',
+        phone: '',
+        email: '',
+        password: '',
+        remark: '',
+        status: '',
+        role_id: ''
+      },
+      optionsOne: [
+        { value: 1, label: '超级管理员' },
+        { value: 2, label: '管理员' },
+        { value: 3, label: '老师' },
+        { value: 4, label: '学生' }
+      ],
+      optionsTwo: [
+        { value: 0, label: '禁用' },
+        { value: 1, label: '启用' }
+      ],
+      // 校验规则设置
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名称', trigger: 'blur' }
+        ],
+        email: [
+          {
+            required: true,
+            validator: (rule, value, callback) => {
+              if (!value) {
+                return callback(new Error('请输入邮箱~'))
+              }
+              // 邮箱正则
+              const reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
+              if (!reg.test(value)) {
+                callback(new Error('邮箱错误~'))
+              }
 
-<style>
-</style>
+              callback()
+            },
+            trigger: 'blur'
+          }
+        ],
+        phone: [
+          {
+            required: true,
+            validator: (rule, value, callback) => {
+              // rule: 校验对象  value: 输入的值  callback: 判断校验是否成功
+              if (!value) {
+                return callback(new Error('请输入手机号~'))
+              }
+              // 手机号的正则校验
+              const reg = /^1[3-9][0-9]{9}$/
+              // 判断手机号是否符号正则
+              if (!reg.test(value)) {
+                return callback(new Error('手机号不合法~'))
+              }
+              // 校验成功,必须调用callback()
+              callback()
+            },
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          { required: true, message: '请输入密码~', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+        ],
+        role_id: [
+          { required: true, message: '请选择角色~', trigger: 'change' }
+        ],
+        status: [{ required: true, message: '请选择状态~', trigger: 'change' }]
+      }
+    }
+  },
+  methods: {
+    // 关闭组件的回调
+    close () {
+      // 关闭表单,重置表单
+      this.dialogVisible = false
+      this.$refs.form.resetFields()
+    },
+    submit () {
+      this.$refs.form.validate(async valid => {
+        if (!valid) return
+        let url = null
+        if (this.mode == 'add') {
+          // 新增不需要 id 字段
+          delete this.form.id
+          url = '/user/add'
+        } else {
+          url = '/user/edit'
+        }
+        const res = await this.$axios.post(url, this.form)
+        if (res.code === 200) {
+          this.$message.success(res.message)
+          this.dialogVisible = false
+          this.$parent.search()
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    }
+  }
+}
+</script>

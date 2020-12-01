@@ -10,3 +10,14 @@ body,
 #app {
   height: 100%;
 }
+/* 全局表单头部样式 */
+.el-dialog .el-dialog__header {
+  background: linear-gradient(270deg, #01c6fa, #1493fa);
+  text-align: center;
+}
+.el-dialog .el-dialog__header .header {
+  color: #fff;
+}
+.el-dialog .el-dialog__header .el-dialog__headerbtn .el-icon-close {
+  color: #fff;
+}

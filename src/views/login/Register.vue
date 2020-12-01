@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <el-dialog :visible.sync="dialogVisible" width="600px" center>
-      <span slot="title" class="el-header">用户注册</span>
+      <span slot="title" class="header">用户注册</span>
 
       <!-- form表单 -->
       <el-form
@@ -230,16 +230,6 @@ export default {
 </script>
 
 <style lang="less">
-.el-dialog .el-dialog__header {
-  background: linear-gradient(270deg, #01c6fa, #1493fa);
-  text-align: center;
-  .el-header {
-    color: #fff;
-  }
-  .el-dialog__headerbtn .el-icon-close {
-    color: #fff;
-  }
-}
 /* 上传文件 */
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;

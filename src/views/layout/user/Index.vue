@@ -28,7 +28,7 @@
     </el-card>
     <el-card class="two">
       <!-- 数据列表 -->
-      <el-table :data="list" stripe style="width: 100%">
+      <el-table :data="list" style="width: 100%">
         <el-table-column prop="id" label="序号" type="index"> </el-table-column>
         <el-table-column prop="username" label="用户名"> </el-table-column>
         <el-table-column prop="phone" label="电话"> </el-table-column>
@@ -55,7 +55,10 @@
               @click="handleStart(scope.row.id)"
               >{{ scope.row.status === 0 ? '启用' : '禁用' }}</el-button
             >
-            <el-button size="mini" @click="handleDelete(scope.row.id)"
+            <el-button
+              type="danger"
+              size="mini"
+              @click="handleDelete(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -79,17 +82,17 @@
         </el-pagination>
       </div>
     </el-card>
-    <update ref="update" />
+    <addOrUpdate ref="addOrUpdate" />
   </div>
 </template>
 
 <script>
 // 导入子组件
-import Update from './Add-or-update'
+import AddOrUpdate from './Add-or-update'
 export default {
   name: 'User',
   components: {
-    Update
+    AddOrUpdate
   },
   data () {
     return {
@@ -137,14 +140,15 @@ export default {
     },
     // 新增
     add () {
-      this.$refs.update.mode = 'add'
-      this.$refs.update.dialogVisible = true
+      this.$refs.addOrUpdate.mode = 'add'
+      this.$refs.addOrUpdate.dialogVisible = true
+      this.$refs.addOrUpdate.form = {}
     },
     // 编辑
     edit (row) {
-      this.$refs.update.form = JSON.parse(JSON.stringify(row))
-      this.$refs.update.mode = 'edit'
-      this.$refs.update.dialogVisible = true
+      this.$refs.addOrUpdate.mode = 'edit'
+      this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
+      this.$refs.addOrUpdate.dialogVisible = true
     },
     // 启用
     async handleStart (id) {

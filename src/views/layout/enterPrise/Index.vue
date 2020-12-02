@@ -87,7 +87,7 @@
       </el-pagination>
     </el-card>
     <!-- 子组件 -->
-    <addOrUpdate ref="addOrUpdate" />
+    <add-or-update ref="addOrUpdate" />
   </div>
 </template>
 

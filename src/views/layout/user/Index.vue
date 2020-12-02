@@ -82,7 +82,7 @@
         </el-pagination>
       </div>
     </el-card>
-    <addOrUpdate ref="addOrUpdate" />
+    <add-or-update ref="addOrUpdate" />
   </div>
 </template>
 

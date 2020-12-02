@@ -1,5 +1,8 @@
 <template>
-  <div>题库列表</div>
+  <div class="question">
+    <el-card> </el-card>
+    <el-card style="margin-top:20px"> </el-card>
+  </div>
 </template>
 
 <script>

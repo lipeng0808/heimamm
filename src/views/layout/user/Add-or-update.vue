@@ -6,13 +6,7 @@
   解决方案:
       利用v-if的特性，进行form的销毁和重建，强行让每一次改操作拿到的数据为父组件传过来的初始值
 -->
-  <el-dialog
-    :visible.sync="dialogVisible"
-    width="600px"
-    @close="close"
-    center
-    v-if="dialogVisible"
-  >
+  <el-dialog :visible.sync="dialogVisible" width="600px" @close="close" center>
     <span slot="title" class="header">
       {{ mode === 'add' ? '新增用户' : '编辑用户' }}
     </span>

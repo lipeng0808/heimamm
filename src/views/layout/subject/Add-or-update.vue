@@ -4,15 +4,9 @@
       form表单的重置是以第一次打开的数据作为重置标准，如果先打开的是更新，那么重置之后以第一次更新的数据作为标准
       Dialog 中的内容是懒加载的，目前 edit (更新)方法的写法导致 Form 刚加载出来时值就已经是新的了，所以 resetFields 也只能回到新值 
   解决方案:
-      利用v-if的特性，进行form的销毁和重建，强行让每一次改操作拿到的数据为父组件传过来的初始值
+      利用v-if的特性，进行form的销毁和重建，强行让每一次改操作拿到的数据为父组件传过来的初始值  v-if="dialogVisible"
 -->
-  <el-dialog
-    :visible.sync="dialogVisible"
-    width="600px"
-    @close="close"
-    center
-    v-if="dialogVisible"
-  >
+  <el-dialog :visible.sync="dialogVisible" width="600px" @close="close" center>
     <span slot="title" class="header">
       {{ mode === 'add' ? '新增学科' : '编辑学科' }}
     </span>
@@ -54,6 +48,7 @@
 
 <script>
 export default {
+  name: 'SubjectAdd',
   data () {
     return {
       dialogVisible: false,

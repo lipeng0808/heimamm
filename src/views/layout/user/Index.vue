@@ -37,7 +37,7 @@
         <el-table-column prop="remark" label="备注"> </el-table-column>
         <el-table-column label="状态">
           <!-- slot插槽 -->
-          <template slot-scope="scope">
+          <template #default="scope">
             <span v-if="scope.row.status === 0" style="color:red;">禁用</span>
             <span v-if="scope.row.status === 1" style="color:#6ac144;"
               >启用</span
@@ -45,7 +45,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-button size="mini" @click="edit(scope.row)">
               编辑
             </el-button>
@@ -142,12 +142,16 @@ export default {
     add () {
       this.$refs.addOrUpdate.mode = 'add'
       this.$refs.addOrUpdate.dialogVisible = true
-      this.$refs.addOrUpdate.form = {}
+      // this.$refs.addOrUpdate.form = {}
     },
     // 编辑
     edit (row) {
       this.$refs.addOrUpdate.mode = 'edit'
-      this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
+      // this.$nextTick(function(){})方法的使用
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
+      })
+
       this.$refs.addOrUpdate.dialogVisible = true
     },
     // 启用

@@ -47,7 +47,7 @@
         <el-table-column prop="remark" label="备注"> </el-table-column>
         <el-table-column label="状态">
           <!-- 插槽的使用 -->
-          <template slot-scope="scope">
+          <template #default="scope">
             <span
               :style="{ color: scope.row.status === 0 ? 'red' : '#7a6297' }"
               >{{ scope.row.status === 0 ? '禁用' : '启用' }}</span
@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-button size="mini" @click="handleEdit(scope.row)"
               >编辑</el-button
             >
@@ -158,12 +158,14 @@ export default {
     add () {
       this.$refs.addOrUpdate.mode = 'add'
       this.$refs.addOrUpdate.dialogVisible = true
-      this.$refs.addOrUpdate.form = {}
+      // this.$refs.addOrUpdate.form = {}
     },
     // 编辑
     handleEdit (row) {
       this.$refs.addOrUpdate.mode = 'edit'
-      this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
+      })
       this.$refs.addOrUpdate.dialogVisible = true
     },
     // 删除

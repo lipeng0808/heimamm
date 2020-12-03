@@ -29,13 +29,22 @@
     <el-card class="two">
       <!-- 数据列表 -->
       <el-table :data="list" style="width: 100%">
-        <el-table-column prop="id" label="序号" type="index"> </el-table-column>
-        <el-table-column prop="username" label="用户名"> </el-table-column>
-        <el-table-column prop="phone" label="电话"> </el-table-column>
-        <el-table-column prop="email" label="邮箱"> </el-table-column>
-        <el-table-column prop="role" label="角色"> </el-table-column>
-        <el-table-column prop="remark" label="备注"> </el-table-column>
-        <el-table-column label="状态">
+        <el-table-column prop="id" label="序号" type="index" align="center">
+        </el-table-column>
+        <el-table-column label="头像" align="center">
+          <img src="" alt="" />
+        </el-table-column>
+        <el-table-column prop="username" label="用户名" align="center">
+        </el-table-column>
+        <el-table-column prop="phone" label="电话" align="center">
+        </el-table-column>
+        <el-table-column prop="email" label="邮箱" align="center">
+        </el-table-column>
+        <el-table-column prop="role" label="角色" align="center">
+        </el-table-column>
+        <el-table-column prop="remark" label="备注" align="center">
+        </el-table-column>
+        <el-table-column label="状态" align="center">
           <!-- slot插槽 -->
           <template #default="scope">
             <span v-if="scope.row.status === 0" style="color:red;">禁用</span>
@@ -44,7 +53,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="220" header-align="center">
           <template #default="scope">
             <el-button size="mini" @click="edit(scope.row)">
               编辑

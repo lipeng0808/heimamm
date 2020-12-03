@@ -36,16 +36,26 @@
 
     <el-card style="margin-top:20px;">
       <el-table ref="filterTable" :data="list" style="width: 100%">
-        <el-table-column type="index" label="序号" width="80">
+        <el-table-column type="index" label="序号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="eid" label="企业编号"> </el-table-column>
-        <el-table-column prop="name" label="企业名称"> </el-table-column>
-        <el-table-column prop="short_name" label="简称"> </el-table-column>
-        <el-table-column prop="username" label="创建者"> </el-table-column>
-        <el-table-column prop="create_time" label="创建日期" sortable>
+        <el-table-column prop="eid" label="企业编号" align="center">
         </el-table-column>
-        <el-table-column prop="remark" label="备注"> </el-table-column>
-        <el-table-column label="状态">
+        <el-table-column prop="name" label="企业名称" align="center">
+        </el-table-column>
+        <el-table-column prop="short_name" label="简称" align="center">
+        </el-table-column>
+        <el-table-column prop="username" label="创建者" align="center">
+        </el-table-column>
+        <el-table-column
+          prop="create_time"
+          label="创建日期"
+          sortable
+          align="center"
+        >
+        </el-table-column>
+        <el-table-column prop="remark" label="备注" align="center">
+        </el-table-column>
+        <el-table-column label="状态" align="center">
           <!-- 插槽的使用 -->
           <template #default="scope">
             <span
@@ -54,7 +64,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="220" header-align="center">
           <template #default="scope">
             <el-button size="mini" @click="handleEdit(scope.row)"
               >编辑</el-button

@@ -62,7 +62,7 @@ export default {
       },
       // 校验规则设置
       rules: {
-        rid: [{ required: true, message: '请输入学科编号', trigger: 'blur' }],
+        rid: [{ required: true, message: '请输入学科编号~', trigger: 'blur' }],
         name: [{ required: true, message: '请输入学科名称~', trigger: 'blur' }]
       }
     }

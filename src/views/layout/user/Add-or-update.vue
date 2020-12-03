@@ -6,7 +6,13 @@
   解决方案:
       利用v-if的特性，进行form的销毁和重建，强行让每一次改操作拿到的数据为父组件传过来的初始值
 -->
-  <el-dialog :visible.sync="dialogVisible" width="600px" @close="close" center>
+  <el-dialog
+    :visible.sync="dialogVisible"
+    width="600px"
+    @close="close"
+    center
+    v-if="dialogVisible"
+  >
     <span slot="title" class="header">
       {{ mode === 'add' ? '新增用户' : '编辑用户' }}
     </span>
@@ -19,6 +25,20 @@
       :inline="false"
       size="normal"
     >
+      <!-- 照片上传 -->
+      <el-form-item label="头像" prop="avatar">
+        <el-upload
+          class="avatar-uploader"
+          :action="uploadUrl"
+          :data="uploadData"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
@@ -71,6 +91,11 @@
 export default {
   data () {
     return {
+      imageUrl: '', //上传的图片
+      uploadData: {
+        image: null //上传时附带的参数
+      },
+      uploadUrl: `${process.env.VUE_APP_BASEURL}/uploads`,
       dialogVisible: false,
       mode: '', // add:新增 edit:编辑
       form: {
@@ -80,7 +105,8 @@ export default {
         password: '',
         remark: '',
         status: '',
-        role_id: ''
+        role_id: '',
+        avatar: ''
       },
       optionsOne: [
         { value: 1, label: '超级管理员' },
@@ -153,6 +179,35 @@ export default {
       this.dialogVisible = false
       this.$refs.form.resetFields()
     },
+    // 上传图片成功
+    handleAvatarSuccess (res, file) {
+      if (res.code === 200) {
+        this.imageUrl = URL.createObjectURL(file.raw)
+        // 上传成功,接收后台返回的图片地址
+        // console.log(res)
+        this.form.avatar = res.data.file_path
+      } else {
+        this.$message.error(res.message)
+      }
+    },
+    // 上传图片前
+    beforeAvatarUpload (file) {
+      const isImg =
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'image/gif'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isImg) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      //
+      this.uploadData.image = file
+      return isImg && isLt2M
+    },
     submit () {
       this.$refs.form.validate(async valid => {
         if (!valid) return
@@ -163,6 +218,7 @@ export default {
           url = '/user/add'
         } else {
           url = '/user/edit'
+          // this.imageUrl = process.env.VUE_APP_BASEURL + '/' + this.form.avatar
         }
         const res = await this.$axios.post(url, this.form)
         if (res.code === 200) {
@@ -173,6 +229,18 @@ export default {
           this.$message.error(res.message)
         }
       })
+    }
+  },
+  // 侦听器
+  watch: {
+    dialogVisible: function (val) {
+      if (val) {
+        if (this.mode === 'add') {
+          this.imageUrl = ''
+        } else {
+          this.imageUrl = process.env.VUE_APP_BASEURL + '/' + this.form.avatar
+        }
+      }
     }
   }
 }

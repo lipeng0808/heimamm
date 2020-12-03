@@ -122,8 +122,7 @@ export default {
       page: 0, //当前页
       limit: 5, //每页显示的数量
       total: 0, //总数
-      list: [], //列表数组
-      url: ''
+      list: [] //列表数组
     }
   },
   methods: {
@@ -155,12 +154,13 @@ export default {
     add () {
       this.$refs.addOrUpdate.mode = 'add'
       this.$refs.addOrUpdate.dialogVisible = true
-      // this.$refs.addOrUpdate.form = {}
+      this.$refs.addOrUpdate.form = {}
     },
     // 编辑
     edit (row) {
       this.$refs.addOrUpdate.mode = 'edit'
       // this.$nextTick(function(){})方法的使用
+      // console.log(row)
       this.$nextTick(() => {
         this.$refs.addOrUpdate.form = JSON.parse(JSON.stringify(row))
       })

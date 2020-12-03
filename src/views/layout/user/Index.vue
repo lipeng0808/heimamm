@@ -32,7 +32,9 @@
         <el-table-column prop="id" label="序号" type="index" align="center">
         </el-table-column>
         <el-table-column label="头像" align="center">
-          <img src="" alt="" />
+          <template #default="{row}">
+            <img :src="url + '/' + row.avatar" alt="" />
+          </template>
         </el-table-column>
         <el-table-column prop="username" label="用户名" align="center">
         </el-table-column>
@@ -108,7 +110,8 @@ export default {
       form: {
         username: '',
         email: '',
-        role_id: ''
+        role_id: '',
+        avatar: ''
       },
       options: [
         { value: 1, label: '超级管理员' },
@@ -119,7 +122,8 @@ export default {
       page: 0, //当前页
       limit: 5, //每页显示的数量
       total: 0, //总数
-      list: [] //列表数组
+      list: [], //列表数组
+      url: ''
     }
   },
   methods: {
@@ -204,6 +208,8 @@ export default {
   mounted () {
     // 发送axios请求
     this.getListData()
+
+    this.url = process.env.VUE_APP_BASEURL
   }
 }
 </script>
@@ -215,5 +221,9 @@ export default {
 .pagination {
   text-align: center;
   padding-top: 20px;
+}
+.cell img {
+  width: 50px;
+  height: 50px;
 }
 </style>

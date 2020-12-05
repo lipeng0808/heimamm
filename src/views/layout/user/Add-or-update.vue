@@ -218,7 +218,6 @@ export default {
           url = '/user/add'
         } else {
           url = '/user/edit'
-          // this.imageUrl = process.env.VUE_APP_BASEURL + '/' + this.form.avatar
         }
         const res = await this.$axios.post(url, this.form)
         if (res.code === 200) {

@@ -112,7 +112,7 @@
               <el-input v-model="form.title"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="10">
             <el-form-item>
               <el-button type="primary" @click="search">搜索</el-button>
               <el-button @click="del">清除</el-button>
@@ -243,12 +243,25 @@
       >
       </el-pagination>
     </el-card>
+    <add-or-update
+      ref="addOrUpdate"
+      :subOptions="subOptions"
+      :enterOptions="enterOptions"
+      :stepOptions="stepOptions"
+      :typeOptions="typeOptions"
+      :difOptions="difOptions"
+    />
   </div>
 </template>
 
 <script>
+// 导入子组件
+import AddOrUpdate from './Add-or-update'
 export default {
   name: 'Question',
+  components: {
+    AddOrUpdate
+  },
   data () {
     return {
       form: {
@@ -332,7 +345,10 @@ export default {
       this.search()
     },
     // 新增
-    add () {},
+    add () {
+      this.$refs.addOrUpdate.mode = 'add'
+      this.$refs.addOrUpdate.dialogVisible = true
+    },
     // 编辑
     edit (id) {
       console.log(id)

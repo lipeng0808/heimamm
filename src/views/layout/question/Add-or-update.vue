@@ -1,6 +1,11 @@
 <template>
   <div class="add-update">
-    <el-dialog :visible.sync="dialogVisible" fullscreen center @close="close">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      fullscreen
+      center
+      v-if="dialogVisible"
+    >
       <span slot="title" class="header">{{
         mode === 'add' ? '新增题目' : '编辑题目'
       }}</span>
@@ -87,6 +92,12 @@
           >
           </quill-editor>
         </el-form-item>
+        <hr />
+        <!-- 题目选择 -->
+        <el-form-item :label="objLabel[form.type]" :prop="objProp[form.type]">
+          <question-type :form="form" />
+        </el-form-item>
+        <hr />
         <!-- 上传视频 -->
         <el-form-item label="解析视频" prop="video">
           <upload-file ref="UploadFile" type="video" :obj="form" />
@@ -129,11 +140,14 @@ import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 // 导入上传文件模块
 import UploadFile from './Upload-file'
+// 导入子组件模块
+import QuestionType from './Question-type'
 export default {
   name: 'Question-add',
   components: {
     quillEditor,
-    UploadFile
+    UploadFile,
+    QuestionType
   },
   // 接收父组件传递过来的值
   // props: 与data()同级
@@ -179,6 +193,16 @@ export default {
       mode: '',
       dialogVisible: false,
       options: regionDataPlus,
+      objLabel: {
+        1: '单选',
+        2: '多选',
+        3: '简答'
+      },
+      objProp: {
+        1: 'single_select_answer',
+        2: 'multiple_select_answer',
+        3: 'short_answer'
+      },
       form: {
         title: '', //标题
         subject: '', //学科id
@@ -189,7 +213,33 @@ export default {
         difficulty: 1, //难度
         answer_analyze: '', //答案解析
         remark: '', //备注
-        video: '' //视频
+        video: '', //视频
+        single_select_answer: 'A', //单选答案
+        multiple_select_answer: [], //多选答案
+        short_answer: '', //简答
+        select_options: [
+          //选项，介绍，图片介绍
+          {
+            label: 'A',
+            text: '',
+            image: ''
+          },
+          {
+            label: 'B',
+            text: '',
+            image: ''
+          },
+          {
+            label: 'C',
+            text: '',
+            image: ''
+          },
+          {
+            label: 'D',
+            text: '',
+            image: ''
+          }
+        ]
       },
       // 规则校验
       rules: {
@@ -207,24 +257,57 @@ export default {
         answer_analyze: [
           { required: true, message: '答案解析不能为空', trigger: 'change' }
         ],
-        remark: [{ required: true, message: '备注不能为空', trigger: 'change' }]
+        remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }],
+        single_select_answer: [
+          { required: true, message: '单选答案不能为空', trigger: 'change' }
+        ],
+        multiple_select_answer: [
+          { required: true, message: '多选答案不能为空', trigger: 'change' }
+        ],
+        short_answer: [
+          { required: true, message: '简答答案不能为空', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
-    close () {
-      this.dialogVisible = false
-      this.$refs.form.resetFields()
-    },
     // 确定新增
     submit () {
       this.$refs.form.validate(async valid => {
         if (!valid) return
+
+        let url = ''
+        if (this.mode === 'add') {
+          url = '/question/add'
+        } else {
+          url = '/question/edit'
+        }
+        const res = await this.$axios.post(url, this.form)
+        if (res.code === 200) {
+          this.$message.success(res.message)
+          this.dialogVisible = false
+          this.$parent.search()
+        } else {
+          this.$message.error(res.message)
+        }
       })
     },
     // 校验标题
     onEditorBlur (val) {
       this.$refs.form.validateField(val)
+    }
+  },
+
+  //
+  watch: {
+    'form.type': function (newval) {
+      if (newval) {
+        this.$refs.form.clearValidate([
+          'single_select_answer',
+          'multiple_select_answer',
+          'short_answer'
+        ])
+      }
     }
   }
 }
@@ -237,6 +320,9 @@ export default {
 
   .el-select {
     width: 300px;
+  }
+  hr {
+    margin-bottom: 10px;
   }
 }
 .el-cascader {

@@ -51,7 +51,8 @@ export default {
       // 判断是图片还是视频
       if (this.type === 'image') {
         this.imageUrl = URL.createObjectURL(file.raw)
-      } else if (this.type === 'video') {
+        this.obj.image = res.data.url
+      } else {
         this.videoUrl = URL.createObjectURL(file.raw)
         this.obj.video = res.data.url
       }
@@ -59,8 +60,21 @@ export default {
     // 上传之前
     beforeAvatarUpload (file) {
       if (this.type === 'image') {
-        console.log('image')
-      } else if (this.type === 'video') {
+        const isImage =
+          file.type === 'image/jpeg' ||
+          file.type === 'image/png' ||
+          file.type === 'image/gif'
+        const isLt2M = file.size / 1024 / 1024 < 2
+
+        if (!isImage) {
+          this.$message.error('上传视频格式不符合!')
+        }
+        if (!isLt2M) {
+          this.$message.error('上传视频大小不能超过 2MB!')
+        }
+        this.uploadData.file = file
+        return isImage && isLt2M
+      } else {
         const isVideo = file.type === 'video/mp4' || file.type === 'video/avi'
         const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -72,6 +86,26 @@ export default {
         }
         this.uploadData.file = file
         return isVideo && isLt2M
+      }
+    }
+  },
+  // 当修改的时候，我们需要这样处理
+  mounted () {
+    if (this.type === 'image' && this.obj.image) {
+      this.imageUrl = process.env.VUE_APP_BASEURL + '/' + this.obj.image
+    } else if (this.type === 'video' && this.obj.video) {
+      this.videoUrl = process.env.VUE_APP_BASEURL + '/' + this.obj.video
+    }
+  },
+  watch: {
+    obj () {
+      if (this.type === 'image' && this.obj.image) {
+        this.imageUrl = process.env.VUE_APP_BASEURL + '/' + this.obj.image
+      } else if (this.type === 'video' && this.obj.video) {
+        this.videoUrl = process.env.VUE_APP_BASEURL + '/' + this.obj.video
+      } else {
+        this.imageUrl = ''
+        this.videoUrl = ''
       }
     }
   }

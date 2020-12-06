@@ -62,7 +62,7 @@
           </el-cascader>
         </el-form-item>
         <el-form-item label="题型" prop="type">
-          <el-radio-group v-model="form.type">
+          <el-radio-group v-model="form.type" @change="typeChange">
             <el-radio
               v-for="item in typeOptions"
               :key="item.value"
@@ -295,19 +295,14 @@ export default {
     // 校验标题
     onEditorBlur (val) {
       this.$refs.form.validateField(val)
-    }
-  },
-
-  //
-  watch: {
-    'form.type': function (newval) {
-      if (newval) {
-        this.$refs.form.clearValidate([
-          'single_select_answer',
-          'multiple_select_answer',
-          'short_answer'
-        ])
-      }
+    },
+    //
+    typeChange () {
+      this.$refs.form.clearValidate([
+        'single_select_answer',
+        'multiple_select_answer',
+        'short_answer'
+      ])
     }
   }
 }

@@ -348,45 +348,45 @@ export default {
     add () {
       this.$refs.addOrUpdate.mode = 'add'
       this.$refs.addOrUpdate.dialogVisible = true
-      this.$refs.addOrUpdate.form = {
-        // 这里的属性有哪些，看接口文档
-        title: '', // 标题
-        subject: '', // 学科
-        step: '', // 阶段
-        enterprise: '', // 企业
-        city: [], // 城市
-        type: 1, // 题型，这里设置1，代表默认选中单选
-        difficulty: 1, // 难度，这里设置1，代表默认选中简单
-        video: '', // 解析视频地址
-        answer_analyze: '', // 答案解析
-        remark: '', // 备注
-        single_select_answer: 'A', // 单选答案，默认值是A
-        multiple_select_answer: [], // 多选答案，要是数组，因为可以选择多个
-        short_answer: '', // 简答答案
-        select_options: [
-          // 单选、多选的选项
-          {
-            label: 'A',
-            text: '',
-            image: ''
-          },
-          {
-            label: 'B',
-            text: '',
-            image: ''
-          },
-          {
-            label: 'C',
-            text: '',
-            image: ''
-          },
-          {
-            label: 'D',
-            text: '',
-            image: ''
-          }
-        ]
-      }
+      // this.$refs.addOrUpdate.form = {
+      //   // 这里的属性有哪些，看接口文档
+      //   title: '', // 标题
+      //   subject: '', // 学科
+      //   step: '', // 阶段
+      //   enterprise: '', // 企业
+      //   city: [], // 城市
+      //   type: 1, // 题型，这里设置1，代表默认选中单选
+      //   difficulty: 1, // 难度，这里设置1，代表默认选中简单
+      //   video: '', // 解析视频地址
+      //   answer_analyze: '', // 答案解析
+      //   remark: '', // 备注
+      //   single_select_answer: 'A', // 单选答案，默认值是A
+      //   multiple_select_answer: [], // 多选答案，要是数组，因为可以选择多个
+      //   short_answer: '', // 简答答案
+      //   select_options: [
+      //     // 单选、多选的选项
+      //     {
+      //       label: 'A',
+      //       text: '',
+      //       image: ''
+      //     },
+      //     {
+      //       label: 'B',
+      //       text: '',
+      //       image: ''
+      //     },
+      //     {
+      //       label: 'C',
+      //       text: '',
+      //       image: ''
+      //     },
+      //     {
+      //       label: 'D',
+      //       text: '',
+      //       image: ''
+      //     }
+      //   ]
+      // }
     },
     // 编辑
     edit (row) {

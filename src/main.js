@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from '@/router'
 import '@/plugins/element.js'
+
+// 导入vuex
+import store from '@/store'
 
 // 导入axios
 import '@/utils/request'
@@ -13,5 +16,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

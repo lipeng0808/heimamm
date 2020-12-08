@@ -50,6 +50,9 @@
       <el-form-item label="电话" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password"></el-input>
+      </el-form-item>
 
       <el-form-item label="角色" prop="role_id">
         <el-select v-model="form.role_id" placeholder="请选择">

@@ -14,51 +14,101 @@ import Question from '@/views/layout/question/Index.vue'
 import EnterPrice from '@/views/layout/enterPrise/Index.vue'
 import Subject from '@/views/layout/subject/Index.vue'
 import NotFound from '@/views/404/NotFound.vue'
+import Welcome from '@/views/layout/welcome/Index.vue'
 
+// const Welcome = () => {
+//   '@/views/welcome/Index.vue'
+// }
 
 
 const routes = [{
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      title: '登录',
+    }
+  },
+  {
+    path: '/layout',
+    component: Layout,
+    redirect: '/layout/welcome',
+    meta: {
+      roles: ['超级管理员', '管理员', '老师', '学生']
+    },
+    children: [{
+        path: 'welcome',
+        component: Welcome,
+        meta: {
+          title: '首页',
+          fullPath: "/layout/welcome",
+          icon: 'el-icon-s-promotion',
+          roles: ['超级管理员', '管理员', '老师', '学生']
+        }
+      },
+      {
+        path: 'chart',
+        component: Chart,
+        meta: {
+          title: '数据预览',
+          fullPath: "/layout/chart",
+          icon: 'el-icon-pie-chart',
+          roles: ['超级管理员', '管理员', '老师']
+        }
+      },
+      {
+        path: 'user',
+        component: User,
+        meta: {
+          title: '用户列表',
+          fullPath: "/layout/user",
+          icon: 'el-icon-user',
+          roles: ['超级管理员', '管理员', '老师']
+        }
+      },
+      {
+        path: 'enterPrice',
+        component: EnterPrice,
+        meta: {
+          title: '企业列表',
+          fullPath: "/layout/enterPrice",
+          icon: 'el-icon-office-building',
+          roles: ['超级管理员', '管理员', '老师']
+        }
+      },
+      {
+        path: 'question',
+        component: Question,
+        meta: {
+          title: '题库列表',
+          fullPath: "/layout/question",
+          icon: 'el-icon-edit-outline',
+          roles: ['超级管理员', '管理员', '老师', '学生']
+        }
+      },
+
+      {
+        path: 'subject',
+        component: Subject,
+        meta: {
+          title: '学科列表',
+          fullPath: "/layout/subject",
+          icon: 'el-icon-notebook-2',
+          roles: ['超级管理员', '管理员', '老师']
+        }
+      }
+    ]
   },
   {
     path: '/',
     redirect: 'Login'
   },
   {
-    path: '/layout',
-    component: Layout,
-    redirect: '/layout/user',
-    children: [{
-        path: 'chart',
-        component: Chart
-      },
-      {
-        path: 'user',
-        component: User
-      },
-      {
-        path: 'question',
-        component: Question
-      },
-      {
-        path: 'enterPrice',
-        component: EnterPrice
-      },
-      {
-        path: 'subject',
-        component: Subject
-      },
-      {
-        path: '*',
-        component: NotFound
-      },
-    ]
-  },
-  {
     path: '*',
-    component: NotFound
+    component: NotFound,
+    meta: {
+      title: '404页'
+    }
   }
 ]
 
@@ -67,7 +117,7 @@ const router = new VueRouter({
 })
 
 // 权限控制,判断是否为登录状态
-
+// 导航前置守卫
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     // 登录页面直接放行
@@ -82,6 +132,12 @@ router.beforeEach((to, from, next) => {
       next('/login')
     }
   }
+})
+
+// 后置守卫
+router.afterEach(to => {
+
+  document.title = to.meta.title || '黑马面面'
 })
 
 export default router

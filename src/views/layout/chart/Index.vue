@@ -104,57 +104,11 @@ export default {
         }
         myChart.setOption(option)
       }
-    },
-    // 柱形图--热门城市统计
-    async getCityData () {
-      const res = await this.$axios.post('/data/hot_cities')
-      if (res.code === 200) {
-        let myChart = echarts.init(this.$refs.right)
-        let dataList = res.data.map(item => {
-          return item.name
-        })
-        let option = {
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
-          },
-          legend: {
-            orient: 'vertical',
-            left: 10,
-            data: dataList
-          },
-          series: [
-            {
-              name: '访问来源',
-              type: 'pie',
-              radius: ['50%', '70%'],
-              avoidLabelOverlap: false,
-              label: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: false
-              },
-              data: res.data
-            }
-          ]
-        }
-        myChart.setOption(option)
-      }
     }
   },
   mounted () {
     this.getTitleData()
     this.getSelectionData()
-    this.getCityData()
   }
 }
 </script>

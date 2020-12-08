@@ -13,6 +13,7 @@ import {
     Row,
     Col,
     Checkbox,
+    CheckboxGroup,
     Link,
     Message,
     Dialog,
@@ -63,6 +64,7 @@ Vue.use(DatePicker)
 Vue.use(Cascader)
 Vue.use(Radio)
 Vue.use(RadioGroup)
+Vue.use(CheckboxGroup);
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

@@ -281,6 +281,7 @@ export default {
           url = '/question/add'
         } else {
           url = '/question/edit'
+          this.form.city = this.form.city.join(',')
         }
         const res = await this.$axios.post(url, this.form)
         if (res.code === 200) {
